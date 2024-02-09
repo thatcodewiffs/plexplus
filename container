@@ -1,0 +1,90 @@
+#!/bin/bash
+#!/
+
+if [ "$1" = "rebuild" ]
+then
+  echo "Building containers without using cache"
+  command="docker compose -f docker-compose.yml build --no-cache ${2}"
+  eval $command
+  exit 0
+fi
+
+if [ "$1" = "build" ]
+then
+  echo "Builiding containers"
+  command="docker compose -f docker-compose.yml build ${2}"
+  eval $command
+  exit 0
+fi
+
+if [ "$1" = "start" ]
+then
+  echo "Starting containers"
+  command="docker compose -f docker-compose.yml up -d ${2} && docker ps"
+  eval $command
+  exit 0
+fi
+
+if [ "$1" = "stop" ]
+then
+  echo "Stopping containers"
+  command="docker compose -f docker-compose.yml stop ${2} && docker compose rm -f ${2} && docker ps"
+  eval $command
+  exit 0
+fi
+
+if [ "$1" = "status" ]
+then
+  echo "Loading container status"
+  docker ps
+  exit 0
+fi
+
+if [ "$1" = "prune" ]
+then
+  echo "Removing all unused containers, images, cache, networks etc."
+  docker system prune
+  exit 0
+fi
+
+if [ "$1" = "kill-all" ]
+then
+  echo "Killing all containers"
+  docker kill $(docker ps -q) && docker ps
+  exit 0
+fi
+
+if [ "$1" = "remove-images" ]
+then
+  echo "Erasing all images"
+  docker rmi -f $(docker images -q)
+  exit 0
+fi
+
+
+echo ""
+echo "Usage: container <command>"
+echo ""
+echo "e.g. "
+echo "./container status"
+echo ""
+echo ""
+echo "General Commands:"
+echo ""
+echo "start .................. Bring container up and dettached"
+echo "stop ................... Stop containers"
+echo "status ................. Container status"
+echo "prune .................. Prune containers, images, cache etc."
+echo "kill-all ............... Halt all containers"
+echo "remove-images .......... Erase all images"
+echo ""
+echo ""
+echo "Examples:"
+echo ""
+echo "./container build"
+echo "./container start"
+echo "./container status"
+echo "./container stop"
+
+
+exit 0

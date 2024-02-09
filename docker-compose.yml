@@ -1,0 +1,25 @@
+version: "3"
+
+services:
+  tautulli:
+    image: lscr.io/linuxserver/tautulli:latest
+    container_name: tautulli
+    restart: unless-stopped
+    volumes:
+      - ./tautulli/config:/config
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+    ports:
+      - 8181:8181
+  ombi:
+    image: lscr.io/linuxserver/ombi:latest
+    container_name: ombi
+    restart: unless-stopped
+    volumes:
+      - ./ombi/config:/config
+    environment:
+      - PUID=$PUID
+      - PGID=$PGID
+    ports:
+      - 3579:3579
